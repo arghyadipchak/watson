@@ -1,0 +1,1 @@
+blacklist = ['__init__']

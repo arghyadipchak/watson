@@ -1,0 +1,2 @@
+# Watson
+Personal Discord Bot
