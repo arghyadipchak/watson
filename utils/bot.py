@@ -1,8 +1,8 @@
-def make_bot(config):
-  from discord import Activity, ActivityType, Intents
-  from discord.ext.commands import Bot
-  import os
+from discord import Activity, ActivityType, Intents
+from discord.ext.commands import Bot
+import os
 
+def make_bot(config) -> Bot:
   intents = Intents.default()
   bot = Bot(command_prefix=config['bot']['prefix'], intents=intents)
 
@@ -22,12 +22,3 @@ def make_bot(config):
       bot.load_extension(f'cogs.{filename[:-3]}')
 
   return bot
-
-def main():
-  from utils.config import get_config
-  config =  get_config()
-  bot = make_bot(config)
-  bot.run(config['bot']['token'])
-
-if __name__=='__main__':
-  main()
