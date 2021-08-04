@@ -13,7 +13,7 @@ class OCI(commands.Cog):
     self.bot = bot
     oci_config = config['oci']
     kc = oci_config['key_content']
-    oci_config['key_content'] = f"{kc[:31]}\n{kc[31:-29].replace(' ','')}\n{kc[-29:]}"
+    oci_config['key_content'] = f"{kc[:27]}\n{kc[27:-25].replace(' ','')}\n{kc[-25:]}"
     validate_config(oci_config)
     self.compartment_id = oci_config['tenancy']
     self.cc = ComputeClient(oci_config)
