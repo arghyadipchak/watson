@@ -1,4 +1,4 @@
-name: Python Test
+name: Main CI
 on:
   push:
     branches: [ main ]
@@ -6,13 +6,14 @@ on:
     branches: [ main ]
 jobs:
   test:
-    name: Testing
+    name: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out the repo
+        uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -29,16 +30,24 @@ jobs:
           file-name: ${{ secrets.CONFIG_FILE }}
       - name: Test with pytest
         run: pytest watson.py
-  notify:
-    name: Discord Notification
+  push_to_registry:
+    name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     needs:
       - test
-    if: ${{ always() }}
+    if: ${{ success() }}
     steps:
-      - name: Notify
-        uses: nobrayner/discord-webhook@v1
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: '${{ github.workflow }}: {{STATUS}}'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64, linux/arm64
+          push: true
+          tags: arghyadipchak/watson:latest
