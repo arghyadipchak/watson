@@ -6,7 +6,7 @@ from discord.message import Message
 from io import BytesIO
 import json
 from typing import Union
-from utils.setup import setup_noconf
+from utils.setup import setup_cog
 
 class Manage(commands.Cog):
   def __init__(self, bot):
@@ -78,4 +78,4 @@ class Manage(commands.Cog):
     except:
       await ctx.send("Error in getting Embed!")
 
-setup = setup_noconf(Manage)
+setup = setup_cog(Manage)

@@ -1,6 +1,6 @@
 from datetime import datetime as dt
 from discord.ext import commands
-from utils.setup import setup_noconf
+from utils.setup import setup_cog
 
 class Misc(commands.Cog):
   def __init__(self, bot):
@@ -24,4 +24,4 @@ class Misc(commands.Cog):
     upt = dt.now() - self.itime
     await ctx.send(f"Bot Uptime: {str(upt)[:-7]}")
 
-setup = setup_noconf(Misc)
+setup = setup_cog(Misc)

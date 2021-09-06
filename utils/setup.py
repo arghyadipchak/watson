@@ -1,12 +1,7 @@
-from .config import get_config
-config = get_config()
+from discord.ext.commands import Cog
+from models.bot import WatsonBot
 
-def setup_wconf(cog):
-  def setup(bot):
-    bot.add_cog(cog(bot, config))
-  return setup
-
-def setup_noconf(cog):
-  def setup(bot):
+def setup_cog(cog: Cog):
+  def setup(bot: WatsonBot):
     bot.add_cog(cog(bot))
   return setup

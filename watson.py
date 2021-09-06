@@ -1,16 +1,17 @@
-from utils.bot import make_bot
-from utils.config import get_config
+from models.bot import WatsonBot
+from os import getenv
 import pytest
+from utils.config import Config
 
 def main():
-  config = get_config()
-  bot = make_bot(config)
+  config = Config(getenv('CONFIG_LOCT', default='config.yml'))
+  bot = WatsonBot(config=config)
   bot.run(config['bot']['token'])
 
 @pytest.mark.asyncio
 async def test():
-  config = get_config()
-  bot = make_bot(config)
+  config = Config(getenv('CONFIG_LOCT', default='config.yml'))
+  bot = WatsonBot(config=config)
   await bot.login(config['bot']['token'])
   await bot.close()
 
