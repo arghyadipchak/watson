@@ -6,9 +6,17 @@ chardet==4.0.0
 charset-normalizer==2.0.6
 discord.py==1.7.3
 idna==3.2
+iniconfig==1.1.1
 multidict==5.2.0
+packaging==21.0
+pluggy==1.0.0
+py==1.10.0
+pyparsing==2.4.7
+pytest==6.2.5
+pytest-asyncio==0.15.1
 PyYAML==5.4.1
 requests==2.26.0
+toml==0.10.2
 typing-extensions==3.10.0.2
 urllib3==1.26.7
 yarl==1.7.0

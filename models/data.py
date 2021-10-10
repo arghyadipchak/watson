@@ -1,43 +1,34 @@
-from aiohttp import ClientSession
-from asyncio import get_event_loop
-from io import BytesIO
 from json import dump, load
+from requests import get, put
 from yaml import safe_dump, safe_load
 
-async def async_get(url: str) -> BytesIO:
-  async with ClientSession() as session:
-    async with session.get(url=url) as resp:
-      return BytesIO(await resp.read())
-
-async def async_put(url: str, dst: str = ''):
-  async with ClientSession() as session:
-    async with session.put(url=url, data=dst) as resp:
-      assert resp.status==200
-
 class Data(dict):
-  def __init__(self: dict, loct: str = 'data.yml'):
+  async def __init__(self: dict, loct: str = 'data.yml'):
     self.loct = loct
     try:
       if self.loct.startswith('http://') or self.loct.startswith('https://'):
-        fh = get_event_loop().run_until_complete(async_get(self.loct))
+        with get(url=loct) as resp:
+          assert resp.status_code==200
+          dst = resp.content
       else:
-        fh = open(loct, 'r')
+        with open(loct, 'r') as fh:
+          dst = fh.read()
       if self.loct.endswith('.json'):
-        data = load(fh)
+        data = load(dst)
       elif self.loct.endswith('.yml') or self.loct.endswith('.yaml'):
-        data = safe_load(fh)
-      fh.close()
+        data = safe_load(dst)
     except:
       data = {}
     super(Data, self).__init__(data)
 
-  def save(self: dict):
+  async def save(self: dict):
     if self.loct.endswith('.json'):
       dst = dump(dict(self), indent=2)
     elif self.loct.endswith('.yml') or self.loct.endswith('.yaml'):
       dst = safe_dump(dict(self), indent=2)
     if self.loct.startswith('http://') or self.loct.startswith('https://'):
-      get_event_loop().run_until_complete(async_put(self.loct, dst))
+      with put(url=self.loct, data=dst) as resp:
+        assert resp.status_code==200
     else:
       with open(self.loct, 'w') as fh:
         fh.write(dst)

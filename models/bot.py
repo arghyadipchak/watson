@@ -1,14 +1,15 @@
 from cogs import blacklist
+from .data import Data
 from discord import Activity, ActivityType, Intents
 from discord.ext.commands import Bot
 from discord.message import Message
 from os import listdir
-from utils.config import Config
 
 class WatsonBot(Bot):
-  def __init__(self: Bot, config: Config, *args, **kwargs):
+  def __init__(self: Bot, config: Data, data: Data, *args, **kwargs):
     super(WatsonBot, self).__init__(command_prefix=config['bot']['prefix'], intents=Intents.all(), *args, **kwargs)
     self.config = config
+    self.data = data
 
     for filename in listdir('./cogs'):
       if filename.endswith('.py') and filename[:-3] not in blacklist:
