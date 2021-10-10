@@ -3,7 +3,7 @@ from requests import get, put
 from yaml import safe_dump, safe_load
 
 class Data(dict):
-  async def __init__(self: dict, loct: str = 'data.yml'):
+  def __init__(self: dict, loct: str = 'data.yml'):
     self.loct = loct
     try:
       if self.loct.startswith('http://') or self.loct.startswith('https://'):
@@ -21,7 +21,7 @@ class Data(dict):
       data = {}
     super(Data, self).__init__(data)
 
-  async def save(self: dict):
+  def save(self: dict):
     if self.loct.endswith('.json'):
       dst = dump(dict(self), indent=2)
     elif self.loct.endswith('.yml') or self.loct.endswith('.yaml'):
